@@ -23,8 +23,9 @@ class PostsDAO:
     def get_by_pk(self, pk):
         """ Выводит пост по номеру"""
         posts = self.get_all()
+
         for post in posts:
-            if post['pk'] == pk:
+            if post["pk"] == pk:
                 return post
 
 
@@ -37,6 +38,7 @@ class PostsDAO:
         for post in posts:
             if post['poster_name'] == user_name:
                 posts_by_user.append(post)
+
         return posts_by_user
 
 
