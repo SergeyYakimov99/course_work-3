@@ -19,8 +19,9 @@ def posts_all():
     try:
         posts = posts_dao.get_all()
         return render_template("index.html", posts=posts)
-    except:
-        return "Что-то не так"
+    except Exception as e:
+        logger.error(f"Произошла ошибка {e}", exc_info=True)
+        return f"Произошла ошибка {e} во время открытия страницы"
 
 
 @posts_blueprint.route('/posts/<int:post_pk>/')
@@ -31,8 +32,9 @@ def posts_one(post_pk):
     try:
         post = posts_dao.get_by_pk(post_pk)
         comments = comments_dao.get_by_post_pk(post_pk)
-    except (JSONDecodeError, FileNotFoundError) as error:
-        return render_template("error.html", error=error)
+    except (JSONDecodeError, FileNotFoundError, Exception) as error:
+        logger.error(error, exc_info=True)
+        return render_template("error.html", error=error), 500
     except BaseException:
         return render_template("error.html", error="неизвестная ошибка")
     else:
